@@ -11,7 +11,7 @@
             <div class="heading-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
             </div>
-            <p class="eyebrow">WELCOME BACK</p>
+            <p class="eyebrow">WELCOME BACKs</p>
             <h2>Sign in to continue</h2>
             <p class="login-subtitle">Enter your details to access your workspace.</p>
         </div>
