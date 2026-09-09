@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\BankAccountController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\TicketVerifyController;
+use App\Http\Controllers\Admin\DashboardController;
 
 Route::get('/ticket/verify/{ticketId}', [TicketVerifyController::class, 'show'])
     ->name('ticket.verify');
@@ -20,9 +21,8 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 
 

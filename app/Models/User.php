@@ -95,6 +95,11 @@ class User extends Authenticatable
         return $this->morphMany(Media::class, 'model');
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class, 'created_by');
+    }
+
     public function profilePhoto()
     {
         return $this->media()->where('collection_name', 'profile')->first();

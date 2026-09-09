@@ -32,10 +32,10 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="bw-field">
-                    <label for="email">Email for Ticket <span class="req">*</span></label>
+                    <label for="email">Email for Ticket </label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                         id="email" name="email" placeholder="Enter email"
-                        value="{{ old('email', $booking->email ?? '') }}" required>
+                        value="{{ old('email', $booking->email ?? '') }}" >
                     @error('email')
                         <span class="invalid-feedback d-block">{{ $message }}</span>
                     @enderror

@@ -1,66 +1,20 @@
 @extends('layouts.admin')
-
-@section('title','Dashboard')
-
+@section('title', 'Analytics Dashboard')
 @section('content')
-
-<div class="row">
-
-<div class="col-lg-3 col-6">
-
-<div class="small-box bg-info">
-
-<div class="inner">
-<h3>{{ \App\Models\User::count() }}</h3>
-<p>Total Users</p>
-</div>
-
-<div class="icon">
-<i class="fas fa-users"></i>
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="col-lg-3 col-6">
-
-<div class="small-box bg-success">
-
-<div class="inner">
-<h3>{{ \App\Models\Role::count() }}</h3>
-<p>Total Roles</p>
-</div>
-
-<div class="icon">
-<i class="fas fa-user-tag"></i>
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="col-lg-3 col-6">
-
-<div class="small-box bg-warning">
-
-<div class="inner">
-<h3>{{ \App\Models\Permission::count() }}</h3>
-<p>Total Permissions</p>
-</div>
-
-<div class="icon">
-<i class="fas fa-key"></i>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
+<style>
+.insight{--muted:#98a6c9;--line:rgba(177,194,255,.13);--panel:rgba(24,34,70,.75);--violet:#a596ff;--cyan:#57dff5;--green:#54e2ae;--amber:#ffc66e;--rose:#ff819e;color:#edf2ff;font-family:Manrope,Inter,system-ui,sans-serif;margin:-15px -15px 0;padding:30px;min-height:calc(100vh - 57px);background:radial-gradient(circle at 10% 0,#29245d 0,transparent 28%),radial-gradient(circle at 92% 15%,#0d5264 0,transparent 24%),#0b1127}.insight *{box-sizing:border-box}.head,.filter,.title-row,.book-head{display:flex;justify-content:space-between;gap:16px}.head{align-items:flex-start;margin-bottom:24px}.kicker{color:#a99cff;font-size:.68rem;font-weight:800;letter-spacing:.16em;margin:0 0 8px}.insight h1{font-size:clamp(1.65rem,3vw,2.35rem);letter-spacing:-.06em;margin:0}.sub{margin:8px 0 0;color:var(--muted);font-size:.78rem}.live{padding:8px 11px;border:1px solid var(--line);border-radius:99px;background:rgba(255,255,255,.04);font-size:.7rem;color:#b7c3de}.live i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:7px;box-shadow:0 0 0 5px rgba(84,226,174,.12)}.filter,.panel,.metric{border:1px solid var(--line);background:linear-gradient(135deg,rgba(35,46,89,.76),rgba(15,23,53,.74));box-shadow:0 18px 45px rgba(0,0,0,.15),inset 0 1px rgba(255,255,255,.05);backdrop-filter:blur(14px)}.filter{align-items:center;padding:12px 14px;border-radius:16px;margin-bottom:22px}.tabs{display:flex;gap:4px;overflow:auto}.tabs a{white-space:nowrap;padding:8px 11px;border-radius:9px;color:#aab7d5;text-decoration:none;font-size:.72rem;font-weight:700}.tabs a.active,.tabs a:hover{background:rgba(160,142,255,.18);color:#fff}.right{display:flex;gap:7px;align-items:center}.insight select,.insight input{height:34px;border:1px solid var(--line);border-radius:8px;background:#141d40;color:#dce5ff;padding:0 9px;font-size:.72rem;outline:none}.custom{display:none;gap:5px}.custom.show{display:flex}.right button{height:34px;border:0;border-radius:8px;padding:0 12px;background:linear-gradient(110deg,#b5a5ff,#72d9f2);color:#101633;font-size:.7rem;font-weight:800;cursor:pointer}.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:13px}.metric{position:relative;overflow:hidden;display:block;padding:17px;border-radius:16px;color:inherit;text-decoration:none;transition:.22s}.metric:hover{transform:translateY(-4px);color:inherit;border-color:rgba(185,198,255,.32)}.metric::after{content:'';position:absolute;width:100px;height:100px;right:-35px;bottom:-56px;border-radius:50%;background:var(--glow);filter:blur(8px);opacity:.34}.metric.sales{--glow:#7785ff}.metric.paid{--glow:#42e6b2}.metric.unpaid{--glow:#ffb34f}.metric.completed{--glow:#54d8f1}.metric.pending{--glow:#fe7095}.top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.67rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase}.icon{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;color:#dfe4ff;background:rgba(255,255,255,.08)}.value{margin-top:19px;font-size:clamp(1.25rem,2.1vw,1.75rem);line-height:1;font-weight:800;letter-spacing:-.055em}.note{margin-top:8px;color:var(--muted);font-size:.68rem}.grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,.8fr);gap:16px;margin-top:17px}.panel{border-radius:18px;padding:20px}.title-row{align-items:flex-start;margin-bottom:18px}.title-row h2,.book-head h2{margin:0;font-size:1rem;letter-spacing:-.03em}.switch{display:flex;gap:3px;padding:3px;border:1px solid var(--line);border-radius:9px}.switch button{border:0;background:transparent;color:#96a5c9;padding:5px 7px;border-radius:6px;font-size:.65rem;cursor:pointer}.switch button.active{background:#31386c;color:#fff}.chart{height:280px}.donut{position:relative;display:grid;place-items:center;height:192px}.donut canvas{max-height:190px}.center{position:absolute;text-align:center}.center strong{display:block;font-size:1.55rem;letter-spacing:-.06em}.center span{color:var(--muted);font-size:.65rem}.break{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line);font-size:.75rem}.legend{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px}.bookings{margin-top:16px}.book-head{align-items:end;margin-bottom:15px}.book-head a,.detail{color:#b5c1ff;text-decoration:none;font-size:.72rem;font-weight:800}.table{width:100%;border-collapse:collapse}.table th{padding:0 9px 10px;text-align:left;color:#8493b8;font-size:.63rem;letter-spacing:.1em;text-transform:uppercase}.table td{padding:13px 9px;border-top:1px solid var(--line);font-size:.75rem;color:#cbd5ed}.customer{display:flex;align-items:center;gap:9px}.avatar{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:linear-gradient(135deg,#6255ad,#36a6ba);color:#fff;font-size:.65rem;font-weight:800}.customer strong{display:block;color:#edf1ff;font-size:.75rem}.customer span{display:block;margin-top:2px;color:#8290b5;font-size:.65rem}.ticket{font-weight:800;color:#b9c5ff}.amount{font-weight:800;color:#fff}.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:99px;font-size:.63rem;font-weight:800}.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}.confirmed,.completed{color:#5fe5b8;background:rgba(84,226,174,.11)}.pending{color:#ffc36a;background:rgba(255,198,110,.11)}.cancelled{color:#ff8eaa;background:rgba(255,129,158,.11)}.empty{padding:38px;text-align:center;color:var(--muted);font-size:.8rem}@media(max-width:1200px){.metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:800px){.insight{margin:-15px -15px 0;padding:20px 15px}.filter{align-items:stretch;flex-direction:column}.right{flex-wrap:wrap}.grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.table{min-width:700px}.bookings{overflow:auto}.chart{height:235px}}@media(max-width:430px){.head{flex-direction:column}.metrics{grid-template-columns:1fr}}
+</style>
+<style>.metric.completed,.metric.pending{color:inherit}</style>
+<div class="insight">
+<header class="head"><div><p class="kicker">{{ $isSuperAdmin ? 'GLOBAL COMMAND CENTER' : 'YOUR BOOKING PERFORMANCE' }}</p><h1>Good {{ now()->hour < 12 ? 'morning' : (now()->hour < 18 ? 'afternoon' : 'evening') }}, {{ auth()->user()->name }}.</h1><p class="sub">{{ $start->format('d M Y') }} – {{ $end->format('d M Y') }} · {{ $isSuperAdmin && $selectedAdmin ? 'Selected administrator data' : ($isSuperAdmin ? 'All administrator data' : 'Only your bookings') }}</p></div><div class="live"><i></i>Live analytics</div></header>
+<form class="filter" id="dashboardFilter" method="GET"><nav class="tabs">@foreach(['today'=>'Today','week'=>'This week','month'=>'This month','last_month'=>'Last month','quarter'=>'3 months','custom'=>'Custom'] as $key=>$label)<a href="{{ route('dashboard',array_merge(request()->except('range','start','end'),['range'=>$key])) }}" class="{{ $range===$key?'active':'' }}" data-range="{{ $key }}">{{ $label }}</a>@endforeach</nav><div class="right">@if($isSuperAdmin)<select name="admin_id" onchange="this.form.submit()"><option value="">All administrators</option>@foreach($admins as $admin)<option value="{{ $admin->id }}" @selected($selectedAdmin===$admin->id)>{{ $admin->name }}</option>@endforeach</select>@endif<div class="custom {{ $range==='custom'?'show':'' }}" id="customDates"><input type="date" name="start" value="{{ $range==='custom'?$start->toDateString():'' }}"><input type="date" name="end" value="{{ $range==='custom'?$end->toDateString():'' }}"></div><input type="hidden" name="range" id="rangeInput" value="{{ $range }}"><button type="submit" id="applyDates" @if($range!=='custom') style="display:none" @endif>Apply</button></div></form>
+@php($base=array_filter(['range'=>$range,'admin_id'=>$selectedAdmin]))
+<section class="metrics"><a class="metric sales" href="{{ route('admin.bookings.index',$base) }}"><div class="top">Total bookings <span class="icon"><i class="fas fa-ticket-alt"></i></span></div><div class="value">{{ number_format($metrics->bookings) }}</div><div class="note">Created in this period</div></a><a class="metric paid" href="{{ route('admin.bookings.index',array_merge($base,['payment_status'=>'confirmed'])) }}"><div class="top">Confirmed sales <span class="icon"><i class="fas fa-indian-rupee-sign"></i></span></div><div class="value">₹{{ number_format($metrics->paid_amount,0) }}</div><div class="note">Payment successfully received</div></a><a class="metric unpaid" href="{{ route('admin.bookings.index',array_merge($base,['payment_status'=>'pending'])) }}"><div class="top">Payment pending <span class="icon"><i class="fas fa-clock"></i></span></div><div class="value">₹{{ number_format($metrics->unpaid_amount,0) }}</div><div class="note">Open ticket amount to collect</div></a><a class="metric completed" href="{{ route('admin.bookings.index',array_merge($base,['status'=>'completed'])) }}"><div class="top">Confirmed booking <span class="icon"><i class="fas fa-circle-check"></i></span></div><div class="value">{{ number_format($metrics->completed) }}</div><div class="note">Booking status confirmed</div></a><a class="metric pending" href="{{ route('admin.bookings.index',array_merge($base,['status'=>'pending'])) }}"><div class="top">Pending booking <span class="icon"><i class="fas fa-hourglass-half"></i></span></div><div class="value">{{ number_format($metrics->pending) }}</div><div class="note">Needs booking review</div></a></section>
+<section class="grid"><article class="panel"><div class="title-row"><div><h2>Sales movement</h2><p class="sub">Hover any point for exact filtered data.</p></div><div class="switch"><button class="active" data-chart="line">Wave</button><button data-chart="bar">Bar</button><button data-chart="candle">Candle</button><button data-chart="table">Table</button></div></div><div class="chart" id="chartView"><canvas id="salesChart"></canvas></div></article><aside class="panel"><div class="title-row"><div><h2>Booking health</h2><p class="sub">Status split for selected dates.</p></div></div><div class="donut"><canvas id="statusChart"></canvas><div class="center"><strong>{{ number_format($metrics->bookings) }}</strong><span>Total bookings</span></div></div><div class="break"><span><i class="legend" style="background:#54e2ae"></i>Confirmed</span><strong>{{ $metrics->completed }}</strong></div><div class="break"><span><i class="legend" style="background:#ffc66e"></i>Pending</span><strong>{{ $metrics->pending }}</strong></div><div class="break"><span><i class="legend" style="background:#ff819e"></i>Cancelled</span><strong>{{ max(0,$metrics->bookings-$metrics->completed-$metrics->pending) }}</strong></div></aside></section>
+<section class="panel bookings"><div class="book-head"><div><h2>Latest customer bookings</h2><p class="sub">Customer, visit date, payment and booking details at a glance.</p></div><a href="{{ route('admin.bookings.index',$base) }}">View all <i class="fas fa-arrow-right"></i></a></div>@if($recentBookings->isEmpty())<div class="empty">No bookings found for this date filter.</div>@else<table class="table"><thead><tr><th>Customer</th><th>Ticket</th>@if($isSuperAdmin)<th>Created by</th>@endif<th>Booking date</th><th>Visit date</th><th>Amount</th><th>Payment</th><th>Status</th><th></th></tr></thead><tbody>@foreach($recentBookings as $booking)<tr><td><div class="customer"><div class="avatar">{{ strtoupper(substr($booking->main_person_name,0,1)) }}</div><div><strong>{{ $booking->main_person_name }}</strong><span>{{ $booking->group_name }} · {{ $booking->pilgrims->count() }} pilgrims</span></div></div></td><td class="ticket">{{ $booking->ticket_number }}</td>@if($isSuperAdmin)<td>{{ $booking->creator?->name ?? 'Legacy record' }}</td>@endif<td>{{ $booking->created_at->format('d M Y') }}</td><td>{{ $booking->visiting_date->format('d M Y') }}</td><td class="amount">₹{{ number_format($booking->total_amount,0) }}</td><td><span class="pill {{ $booking->payment_status }}">{{ ucfirst($booking->payment_status) }}</span></td><td><span class="pill {{ $booking->status }}">{{ ucfirst($booking->status) }}</span></td><td><a class="detail" href="{{ route('admin.bookings.show',$booking) }}">Details</a></td></tr>@endforeach</tbody></table>@endif</section></div>
+@endsection
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script><script>
+const labels=@json($chartLabels),amounts=@json($chartAmounts),counts=@json($chartBookings),c={cyan:'#57dff5',green:'#54e2ae',amber:'#ffc66e',rose:'#ff819e',grid:'rgba(180,196,255,.1)',muted:'#93a2c6'};Chart.defaults.color=c.muted;Chart.defaults.font.family='Manrope,Inter,sans-serif';let chart;function render(mode='line'){let canvas=document.getElementById('salesChart');if(chart)chart.destroy();let type=['bar','candle'].includes(mode)?'bar':'line';chart=new Chart(canvas,{type,data:{labels,datasets:[{label:mode==='candle'?'Bookings':'Sales amount',data:mode==='candle'?counts:amounts,borderColor:c.cyan,backgroundColor:type==='bar'?(mode==='candle'?'rgba(165,150,255,.7)':'rgba(87,223,245,.55)'):'rgba(87,223,245,.15)',fill:type==='line',tension:.42,borderWidth:2,pointRadius:type==='line'?3:0,borderRadius:type==='bar'?7:0}]},options:{responsive:true,maintainAspectRatio:false,animation:{duration:900},plugins:{legend:{display:false},tooltip:{backgroundColor:'#141d40',displayColors:false,callbacks:{label:x=>mode==='candle'?x.raw+' bookings':'₹'+Number(x.raw).toLocaleString('en-IN')}}},scales:{x:{grid:{display:false},ticks:{maxTicksLimit:7}},y:{beginAtZero:true,grid:{color:c.grid},ticks:{callback:x=>mode==='candle'?x:'₹'+Number(x).toLocaleString('en-IN',{notation:'compact'})}}}}})}render();new Chart(document.getElementById('statusChart'),{type:'doughnut',data:{labels:['Confirmed','Pending','Cancelled'],datasets:[{data:[{{ (int)$metrics->completed }},{{ (int)$metrics->pending }},{{ max(0,(int)$metrics->bookings-(int)$metrics->completed-(int)$metrics->pending) }}],backgroundColor:[c.green,c.amber,c.rose],borderWidth:0,hoverOffset:8}]},options:{cutout:'76%',plugins:{legend:{display:false}}}});document.querySelectorAll('[data-chart]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-chart]').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(b.dataset.chart==='table'){if(chart)chart.destroy();document.getElementById('chartView').innerHTML='<div style="height:100%;overflow:auto"><table class="table"><thead><tr><th>Date</th><th>Sales</th><th>Bookings</th></tr></thead><tbody>'+labels.map((l,i)=>'<tr><td>'+l+'</td><td class="amount">₹'+Number(amounts[i]).toLocaleString('en-IN')+'</td><td>'+counts[i]+'</td></tr>').join('')+'</tbody></table></div>'}else{document.getElementById('chartView').innerHTML='<canvas id="salesChart"></canvas>';render(b.dataset.chart)}});document.querySelector('[data-range="custom"]').onclick=e=>{e.preventDefault();document.getElementById('rangeInput').value='custom';document.getElementById('customDates').classList.add('show');document.getElementById('applyDates').style.display='block'};
+</script>
 @endsection

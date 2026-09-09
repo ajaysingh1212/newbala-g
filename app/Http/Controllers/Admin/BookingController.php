@@ -7,13 +7,32 @@ use App\Models\Booking;
 use App\Models\BookingType;
 use App\Models\Pilgrim;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use PDF;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::with('pilgrims')->latest()->paginate(10);
+        $query = Booking::with('pilgrims')->visibleTo($request->user());
+
+        if ($request->user()->isSuperAdmin() && $request->filled('admin_id')) {
+            $query->where('created_by', $request->integer('admin_id'));
+        }
+
+        if ($request->filled('range')) {
+            [$start, $end] = $this->dateRange($request);
+            $query->whereBetween('created_at', [$start->startOfDay(), $end->endOfDay()]);
+        }
+
+        if (in_array($request->payment_status, ['confirmed', 'pending'], true)) {
+            $query->where('payment_status', $request->payment_status);
+        }
+        if (in_array($request->status, ['completed', 'pending', 'cancelled'], true)) {
+            $query->where('status', $request->status);
+        }
+
+        $bookings = $query->latest()->paginate(10)->withQueryString();
         return view('admin.bookings.index', compact('bookings'));
     }
 
@@ -28,7 +47,7 @@ class BookingController extends Controller
         $request->validate([
             'group_name' => 'required|string',
             'main_person_name' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'visiting_date' => 'required|date',
             'slot_time' => 'required|string',
             'payment_status' => 'required|in:confirmed,pending',
@@ -57,6 +76,7 @@ class BookingController extends Controller
 
         $data = [
             'ticket_number' => $this->generateTicketNumber(),
+            'created_by' => $request->user()->id,
             'group_name' => $request->group_name,
             'main_person_name' => $request->main_person_name,
             'email' => $request->email,
@@ -98,20 +118,20 @@ class BookingController extends Controller
 
     public function show($id)
     {
-        $booking = Booking::with('pilgrims.bookingType')->findOrFail($id);
+        $booking = Booking::visibleTo(auth()->user())->with('pilgrims.bookingType')->findOrFail($id);
         return view('admin.bookings.show', compact('booking'));
     }
 
     public function edit($id)
     {
-        $booking = Booking::with('pilgrims')->findOrFail($id);
+        $booking = Booking::visibleTo(auth()->user())->with('pilgrims')->findOrFail($id);
         $bookingTypes = BookingType::where('status', 'active')->get();
         return view('admin.bookings.edit', compact('booking', 'bookingTypes'));
     }
 
     public function update(Request $request, $id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::visibleTo(auth()->user())->findOrFail($id);
 
         $request->validate([
             'group_name' => 'required|string',
@@ -150,7 +170,7 @@ class BookingController extends Controller
 
     public function destroy($id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::visibleTo(auth()->user())->findOrFail($id);
         $booking->pilgrims()->delete();
         $booking->delete();
 
@@ -159,7 +179,7 @@ class BookingController extends Controller
 
     public function updateStatus(Request $request, $bookingId)
     {
-        $booking = Booking::findOrFail($bookingId);
+        $booking = Booking::visibleTo(auth()->user())->findOrFail($bookingId);
 
         $validated = $request->validate([
             'status' => 'required|in:completed,cancelled',
@@ -177,7 +197,7 @@ class BookingController extends Controller
 
     public function generatePDF($id)
     {
-        $booking = Booking::with('pilgrims.bookingType')->findOrFail($id);
+        $booking = Booking::visibleTo(auth()->user())->with('pilgrims.bookingType')->findOrFail($id);
 
         $pdf = PDF::loadView('admin.bookings.ticket-pdf', compact('booking'));
 
@@ -193,5 +213,19 @@ class BookingController extends Controller
         } while (Booking::where('ticket_number', $ticketNumber)->exists());
 
         return $ticketNumber;
+    }
+
+    private function dateRange(Request $request): array
+    {
+        $today = now();
+
+        return match ($request->input('range')) {
+            'today' => [$today->copy(), $today->copy()],
+            'week' => [$today->copy()->startOfWeek(), $today->copy()->endOfWeek()],
+            'last_month' => [$today->copy()->subMonthNoOverflow()->startOfMonth(), $today->copy()->subMonthNoOverflow()->endOfMonth()],
+            'quarter' => [$today->copy()->subMonths(2)->startOfMonth(), $today->copy()->endOfMonth()],
+            'custom' => [Carbon::parse($request->input('start', $today->toDateString())), Carbon::parse($request->input('end', $today->toDateString()))],
+            default => [$today->copy()->startOfMonth(), $today->copy()->endOfMonth()],
+        };
     }
 }
