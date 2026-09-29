@@ -32,8 +32,13 @@ class BookingController extends Controller
             $query->where('status', $request->status);
         }
 
-        $bookings = $query->latest()->paginate(10)->withQueryString();
-        return view('admin.bookings.index', compact('bookings'));
+        $summary = (clone $query)
+            ->selectRaw("COUNT(*) as bookings, COALESCE(SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END), 0) as completed, COALESCE(SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END), 0) as pending, COALESCE(SUM(total_amount), 0) as total_amount")
+            ->first();
+
+        $bookings = $query->latest()->get();
+
+        return view('admin.bookings.index', compact('bookings', 'summary'));
     }
 
     public function create()

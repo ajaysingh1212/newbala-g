@@ -31,7 +31,7 @@ class DashboardController extends Controller
         }
 
         $query->whereBetween('created_at', [$start->copy()->startOfDay(), $end->copy()->endOfDay()]);
-        $metrics = (clone $query)->selectRaw("COUNT(*) as bookings, COALESCE(SUM(CASE WHEN payment_status = 'confirmed' THEN total_amount ELSE 0 END), 0) as paid_amount, COALESCE(SUM(CASE WHEN payment_status = 'pending' THEN total_amount ELSE 0 END), 0) as unpaid_amount, COALESCE(SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END), 0) as completed, COALESCE(SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END), 0) as pending")->first();
+        $metrics = (clone $query)->selectRaw("COUNT(*) as bookings, COALESCE(SUM(CASE WHEN payment_status = 'confirmed' THEN 1 ELSE 0 END), 0) as paid_count, COALESCE(SUM(CASE WHEN payment_status = 'confirmed' THEN total_amount ELSE 0 END), 0) as paid_amount, COALESCE(SUM(CASE WHEN payment_status = 'pending' THEN 1 ELSE 0 END), 0) as unpaid_count, COALESCE(SUM(CASE WHEN payment_status = 'pending' THEN total_amount ELSE 0 END), 0) as unpaid_amount, COALESCE(SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END), 0) as completed, COALESCE(SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END), 0) as pending")->first();
 
         $recentBookings = (clone $query)->with(['pilgrims', 'creator'])->latest()->limit(8)->get();
         $chartRows = (clone $query)->selectRaw('DATE(created_at) as day, COALESCE(SUM(total_amount), 0) as amount, COUNT(*) as bookings')

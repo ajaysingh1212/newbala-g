@@ -376,28 +376,28 @@
         <div class="yatra-stat">
             <div class="yatra-stat__icon"><i class="fas fa-calendar-check"></i></div>
             <div>
-                <div class="yatra-stat__num">{{ $bookings->count() }}</div>
+                <div class="yatra-stat__num">{{ number_format($summary->bookings) }}</div>
                 <div class="yatra-stat__label">Total Bookings</div>
             </div>
         </div>
         <div class="yatra-stat confirmed">
             <div class="yatra-stat__icon"><i class="fas fa-check-circle"></i></div>
             <div>
-                <div class="yatra-stat__num">{{ $bookings->where('status', 'completed')->count() }}</div>
+                <div class="yatra-stat__num">{{ number_format($summary->completed) }}</div>
                 <div class="yatra-stat__label">Completed</div>
             </div>
         </div>
         <div class="yatra-stat pending">
             <div class="yatra-stat__icon"><i class="fas fa-hourglass-half"></i></div>
             <div>
-                <div class="yatra-stat__num">{{ $bookings->where('status', 'pending')->count() }}</div>
+                <div class="yatra-stat__num">{{ number_format($summary->pending) }}</div>
                 <div class="yatra-stat__label">Pending</div>
             </div>
         </div>
         <div class="yatra-stat revenue">
             <div class="yatra-stat__icon"><i class="fas fa-coins"></i></div>
             <div>
-                <div class="yatra-stat__num">₹{{ number_format($bookings->sum('total_amount'), 0) }}</div>
+                <div class="yatra-stat__num">₹{{ number_format($summary->total_amount, 0) }}</div>
                 <div class="yatra-stat__label">Total Revenue</div>
             </div>
         </div>
@@ -541,7 +541,7 @@
             </table>
         </div>
         <div class="yatra-footer">
-            Showing {{ $bookings->count() }} {{ Str::plural('booking', $bookings->count()) }}
+            Showing {{ number_format($bookings->count()) }} {{ Str::plural('booking', $bookings->count()) }}. Use Next to view more than 10 records.
         </div>
         @endif
     </div>
